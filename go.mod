@@ -1,4 +1,4 @@
-module github.com/regginator/vince
+module github.com/chadhyatt/vince
 
 go 1.23.1
 

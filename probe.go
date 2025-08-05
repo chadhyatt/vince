@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/chadhyatt/vince/rfb"
 	"github.com/pterm/pterm"
-	"github.com/regginator/vince/rfb"
 )
 
 func doInitProbe() {

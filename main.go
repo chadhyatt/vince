@@ -12,10 +12,10 @@ import (
 
 	_ "embed"
 
+	"github.com/chadhyatt/vince/pool"
+	"github.com/chadhyatt/vince/rfb"
+	"github.com/chadhyatt/vince/util"
 	"github.com/pterm/pterm"
-	"github.com/regginator/vince/pool"
-	"github.com/regginator/vince/rfb"
-	"github.com/regginator/vince/util"
 )
 
 //go:embed VERSION
@@ -74,8 +74,8 @@ func usage(exitCode int) {
 
 func main() {
 	fmt.Fprintf(os.Stderr, `ViNCe v%s
-MIT License | Copyright (c) 2025 reggie@latte.to
-https://github.com/regginator/vince
+MIT License | Copyright (c) 2025 Chad Hyatt <chad@hyatt.page>
+https://github.com/chadhyatt/vince
 
 `, vinceVersion)
 
