@@ -14,17 +14,17 @@
 A fast, dedicated VNC authentication bruteforcing tool, written in Go
 
 > [!WARNING]
-> Only use tools like ViNCe against networks and systems you have explicit permission to test on, I am not responsible for any malpractice caused or malicious activity performed using ViNCe.
+> Use ViNCe only on networks and systems for which you have explicit permission. I am not liable for any misuse or malicious activities carried out using ViNCe.
 
 ## Install
 
 #### **Prebuilt Binaries**
 
-Head over to the [latest release][link/latest-release], then download & unpack the binary for your respective platform. Prebuilt binaries are automatically published per every release for various systems and architectures
+Head over to the [latest release][link/latest-release], then download & extract the binary for your respective platform. Prebuilt binaries are published automatically with each release for various systems and architectures.
 
 #### **`go install`**
 
-You can also install or update Vince with Go's built-in `go install`, granted you have a *recent* version of [Go](https://go.dev) installed, and `~/go/bin` is accessible from PATH:
+You can also install or update Vince with Go's built-in `go install`, granted you have a recent version of [Go](https://go.dev) installed, and `~/go/bin` is accessible from PATH:
 
 ```sh
 go install -v github.com/chadhyatt/vince@latest
@@ -32,11 +32,8 @@ go install -v github.com/chadhyatt/vince@latest
 
 ## Usage
 
-See full usage documentation below:
-
 ```
 ViNCe v0.1.2
-
 MIT License | Copyright (c) 2025 Chad Hyatt <chad@hyatt.page>
 https://github.com/chadhyatt/vince
 
