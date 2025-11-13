@@ -33,7 +33,7 @@ go install -v github.com/chadhyatt/vince@latest
 ## Usage
 
 ```
-ViNCe v0.2.0
+ViNCe v0.2.1
 MIT License | Copyright (c) 2025 Chad Hyatt <chad@hyatt.page>
 https://github.com/chadhyatt/vince
 
