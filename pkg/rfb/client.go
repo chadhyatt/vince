@@ -36,7 +36,7 @@ type Client struct {
 	NoVncWebsockifyPath string
 	NoVncUserAgent      string
 
-	// Generally et internally, but accessible by frontend
+	// Generally set internally, but accessible by frontend
 
 	Conn           net.Conn
 	ProtoVer       string // Negotiated protocol version
