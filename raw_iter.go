@@ -9,7 +9,6 @@ import (
 
 type RawIter struct{}
 
-// TODO: We can totally do this with just a one-line calculation, revise this
 func (iter *RawIter) GetPasswordCount() uint64 {
 	numChars := uint64(len(*RawCharset))
 

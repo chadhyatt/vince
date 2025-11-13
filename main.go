@@ -21,7 +21,6 @@ import (
 //go:embed VERSION
 var vinceVersion string
 
-// All command-line arguments
 var (
 	// conn
 	TargetAddr = flag.String("a", "", "Target VNC server [address:port], port defaults to 5900 unless specified")
@@ -39,7 +38,7 @@ var (
 	DelaySeconds = flag.Float64("delay", 0, "Delay between connections per worker thread")
 	StartIndex   = flag.Uint64("start", 0, "Start at index n in password iteration")
 
-	BruteMode = flag.String("m", "wordlist", "Mode of bruteforce [wordlist, raw]")
+	BruteMode = flag.String("m", "wordlist", "Mode of bruteforce [wordlist, raw], defaults to wordlist")
 	// TODO: Actually implement -auth flag
 	AuthType = flag.String("auth", "vnc", "(Planned) Force use of a specific authentication type [vnc, tight]")
 
@@ -125,9 +124,20 @@ https://github.com/chadhyatt/vince
 	var iter IterProvider
 
 	// Check args based on bruteforce mode, and assign the IterProvider
-	switch *BruteMode {
+
+	bruteMode := *BruteMode
+	if bruteMode == "" {
+		bruteMode = "wordlist"
+	}
+
+	switch bruteMode {
 	case "wordlist":
-		if *WordlistPath == "" {
+		if *BruteMode == "" {
+			// User only provided server addr (-a), slightly more helpful error
+			pterm.Error.Printf("provide a path to a wordlist file (-w), or specify another bruteforce mode (-m)\n")
+			fmt.Println()
+			usage(1)
+		} else if *WordlistPath == "" {
 			pterm.Error.Printf("bruteforce mode (-m) \"wordlist\" provided, but wordlist path (-w) is missing\n")
 			fmt.Println()
 			usage(1)
@@ -165,7 +175,7 @@ https://github.com/chadhyatt/vince
 			os.Exit(1)
 		}
 	default:
-		pterm.Error.Printf("invalid value for bruteforce mode (-m) \"%s\", see usage\n", *BruteMode)
+		pterm.Error.Printf("invalid value for bruteforce mode (-m) \"%s\", see usage\n", bruteMode)
 		fmt.Println()
 		usage(1)
 	}
