@@ -4,6 +4,7 @@ package main
 
 import (
 	"bufio"
+	"log/slog"
 	"os"
 	"slices"
 	"strings"
@@ -64,7 +65,7 @@ func (iter *WordlistIter) IterPasswords() func(func(string) bool) {
 		}
 
 		if err := scanner.Err(); err != nil {
-			pterm.Error.Printf("error reading wordlist: %s\n", err)
+			slog.Error("error reading from wordlist", "err", err)
 		}
 
 		// Remove duplicate entries, realloc entire word store
@@ -106,7 +107,7 @@ func countWordsInFile(filePath string) int {
 	}
 
 	if err := scanner.Err(); err != nil {
-		pterm.Error.Printf("error reading wordlist: %s\n", err)
+		slog.Error("error reading from wordlist", "err", err)
 	}
 
 	return out

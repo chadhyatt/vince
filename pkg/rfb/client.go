@@ -7,7 +7,7 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
-	"log"
+	"log/slog"
 	"math/bits"
 	"net"
 	"net/http"
@@ -70,7 +70,7 @@ func (client *Client) read(buf []byte) (int, error) {
 	n, err := client.Conn.Read(buf)
 	if client.PacketLog && err == nil {
 		dump := hex.Dump(buf[:n])
-		log.Printf("[RECV] (%s -> %s)\n%s\n", client.Conn.RemoteAddr().String(), client.Conn.LocalAddr().String(), dump)
+		slog.Debug(fmt.Sprintf("[RECV] (%s -> %s)\n%s\n", client.Conn.RemoteAddr().String(), client.Conn.LocalAddr().String(), dump))
 	}
 
 	return n, err
@@ -80,7 +80,7 @@ func (client *Client) write(buf []byte) (int, error) {
 	n, err := client.Conn.Write(buf)
 	if client.PacketLog && err == nil {
 		dump := hex.Dump(buf[:n])
-		log.Printf("[SEND] (%s -> %s)\n%s\n", client.Conn.LocalAddr().String(), client.Conn.RemoteAddr().String(), dump)
+		slog.Debug(fmt.Sprintf("[SEND] (%s -> %s)\n%s\n", client.Conn.LocalAddr().String(), client.Conn.RemoteAddr().String(), dump))
 	}
 
 	return n, err

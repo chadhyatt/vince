@@ -19,7 +19,7 @@ const (
 	VncAuthBasic           // aka "VNC Authentication"
 
 	// Non-standard auth types
-	// All of 3 to 15, as well as 128 to 255 are technicalllllly assigned to RealVNC, so we'll skip iota by 13
+	// NOTE: Auth type IDs 3 to 15, as well as 128 to 255 are technically assigned to RealVNC
 
 	VncAuthTight VncAuth = iota + 13
 	VncAuthUltra

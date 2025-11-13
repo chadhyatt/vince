@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log/slog"
 	"os"
 	"os/signal"
 	"slices"
@@ -23,9 +24,9 @@ var vinceVersion string
 
 var (
 	// conn
-	TargetAddr = flag.String("a", "", "Target VNC server [address:port], port defaults to 5900 unless specified")
+	TargetAddr = flag.String("a", "", "Target VNC server [address:port], port defaults to 5900")
 	ConnType   = flag.String("conn", "tcp", "Use connection type [tcp, udp]")
-	ProxyFile  = flag.String("proxies", "", "Path to list of SOCKS(4/5) proxies to use for workers. If not provided, no proxies are used. File must be a txt list of proxies in the format \"scheme://[username:pass@]host[:port]\"")
+	ProxyFile  = flag.String("proxies", "", "Path to list of SOCKS(4/5) proxies to use for workers. File must be a list of proxies in the format \"scheme://[username:pass@]host[:port]\", delimited by newlines")
 
 	IsNoVnc             = flag.Bool("novnc", false, "Specifies that the host is a noVNC server, and to connect over WebSocket")
 	NoVncIsSsl          = flag.Bool("novnc-ssl", false, "If -novnc, connects to the noVNC server over SSL (cert is ignored)")
@@ -38,16 +39,16 @@ var (
 	DelaySeconds = flag.Float64("delay", 0, "Delay between connections per worker thread")
 	StartIndex   = flag.Uint64("start", 0, "Start at index n in password iteration")
 
-	BruteMode = flag.String("m", "wordlist", "Mode of bruteforce [wordlist, raw], defaults to wordlist")
+	BruteMode = flag.String("m", "", "Mode of bruteforce [wordlist, raw], defaults to wordlist")
 	// TODO: Actually implement -auth flag
 	AuthType = flag.String("auth", "vnc", "(Planned) Force use of a specific authentication type [vnc, tight]")
 
 	// -m wordlist
-	WordlistPath = flag.String("w", "", "If mode is wordlist, path to the wordlist file to source from")
+	WordlistPath = flag.String("w", "", "If -m wordlist, path to the wordlist file to source from")
 
 	// -m raw
-	RawCharset = flag.String("chars", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()?><;:'\"", "If mode is raw, the character set used for permutations")
-	RawRange   = flag.String("range", "1-6", "If mode is raw, min/max number range for password combination length. May be either a single number, or 2 numbers in the format \"1-6\"")
+	RawCharset = flag.String("chars", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()?><;:'\"", "If -m raw, the character set used for permutations")
+	RawRange   = flag.String("range", "1-4", "If -m raw, min/max number range for password combination length. May be either a single number, or 2 numbers in the format \"1-6\"")
 
 	// debug
 	PacketLog = flag.Bool("packet-log", false, "Enables packet dump logging for debug (only use with one thread)")
@@ -64,6 +65,14 @@ var (
 	// PTerm progress bar
 	progressBar *pterm.ProgressbarPrinter
 )
+
+func init() {
+	l := pterm.NewSlogHandler(pterm.DefaultLogger.
+		WithLevel(pterm.LogLevelDebug).
+		WithTime(true))
+
+	slog.SetDefault(slog.New(l))
+}
 
 func usage(exitCode int) {
 	flag.Usage()
@@ -213,9 +222,9 @@ https://github.com/chadhyatt/vince
 			lastMsg := ""
 			for msg := range newFailedMsgChan {
 				if lastMsg == "" {
-					pterm.Info.Printf("Current 'failed' message from server: \"%s\"\n", msg)
+					slog.Info(fmt.Sprintf("Current 'failed' message from server: \"%s\"", msg))
 				} else if msg != lastMsg {
-					pterm.Warning.Printf("New 'failed' message from server: \"%s\"\n", msg)
+					slog.Warn(fmt.Sprintf("New 'failed' message from server: \"%s\"", msg))
 				} else {
 					continue
 				}
@@ -241,7 +250,7 @@ https://github.com/chadhyatt/vince
 							break
 						} else if nextErr != nil {
 							if lastErr == nil || nextErr.Error() != lastErr.Error() {
-								pterm.Error.Printf("%s\n", nextErr)
+								slog.Error(fmt.Sprint(nextErr))
 							} else {
 								time.Sleep(1 * time.Second)
 							}
@@ -296,7 +305,7 @@ https://github.com/chadhyatt/vince
 							}
 
 							if client.SecurityResult.Success {
-								foundPwFunc(fmt.Sprintf("🎉 FOUND PASSWORD!! \"%s\"\n", pw))
+								foundPwFunc(fmt.Sprintf("🎉 Found password: \"%s\"", pw))
 							} else if client.SecurityResult.Reason != "" {
 								newFailedMsgChan <- client.SecurityResult.Reason
 							}
@@ -320,7 +329,7 @@ https://github.com/chadhyatt/vince
 			}()
 		}
 
-		// Actually start the progressbar at the index it will be at
+		// Start the progressbar at the index it's actually set to (if specified by the user)
 		if *StartIndex != 0 {
 			progressBar.Add(int(*StartIndex) - 1)
 		}
