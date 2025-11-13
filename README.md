@@ -33,50 +33,48 @@ go install -v github.com/chadhyatt/vince@latest
 ## Usage
 
 ```
-ViNCe v0.1.2
+ViNCe v0.2.0
 MIT License | Copyright (c) 2025 Chad Hyatt <chad@hyatt.page>
 https://github.com/chadhyatt/vince
 
  INFO  Provide VNC server address and port with the `-a` flag (e.g. "192.168.0.134", "10.13.33.37:5901")
        See further usage below
 
-USAGE: ./vince [OPTION]...
+USAGE: vince [OPTION]...
   -a string
-    	Target VNC server [address:port], port defaults to 5900 unless specified
+    	Target VNC server [address:port], port defaults to 5900
   -auth string
     	(Planned) Force use of a specific authentication type [vnc, tight] (default "vnc")
   -chars string
-    	If mode is raw, the character set used for permutations (default "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()?><;:'\"")
+    	If -m raw, the character set used for permutations (default "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()?><;:'\"")
   -conn string
     	Use connection type [tcp, udp] (default "tcp")
   -delay float
     	Delay between connections per worker thread
   -m string
-    	Mode of bruteforce [wordlist, raw] (default "wordlist")
-  -no-probe
-    	Don't perform an initial connection handshake probe
+    	Mode of bruteforce [wordlist, raw], defaults to wordlist
   -novnc
     	Specifies that the host is a noVNC server, and to connect over WebSocket
+  -novnc-ssl
+    	If -novnc, connects to the noVNC server over SSL (cert is ignored)
   -novnc-ua string
-    	If -novnc, the User-Agent header to pass when connecting to Websockify
+    	If -novnc, a specific User-Agent header to use with requests
   -novnc-websockify-path string
-    	If -novnc, the noVNC Websockify path (relative to /) to connect over (default "/websockify")
-  -novnc-wss
-    	If -novnc, connects to the noVNC server over wss instead of ws (cert is ignored)
-  -packet-debug
-    	Enables packet dump logging for debug (meant for use with one thread)
+    	If -novnc, the noVNC Websockify path to connect over (default "/websockify")
+  -packet-log
+    	Enables packet dump logging for debug (only use with one thread)
   -proxies string
-    	Path to list of SOCKS(4/5) proxies to use for workers. If not provided, no proxies are used. File must be a txt list of proxies in the format "scheme://[username:pass@]host[:port]"
+    	Path to list of SOCKS(4/5) proxies to use for workers. File must be a list of proxies in the format "scheme://[username:pass@]host[:port]", delimited by newlines
   -range string
-    	If mode is raw, min/max number range for password combination length. May be either a single number, or 2 numbers in the format "1-6" (default "1-6")
+    	If -m raw, min/max number range for password combination length. May be either a single number, or 2 numbers in the format "1-6" (default "1-4")
   -retries int
     	Number of retry attempts per password for failed connections. -1 means infinite retries (default -1)
   -start uint
     	Start at index n in password iteration
   -t int
-    	Number of simultaneous worker threads. The target server may only be able to handle so many, or it may restrict 1 connection per IP, so proceed with caution (default 1)
+    	Number of worker threads (default 1)
   -w string
-    	If mode is wordlist, path to the wordlist file to source from
+    	If -m wordlist, path to the wordlist file to source from
 ```
 
 ## License
