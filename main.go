@@ -80,7 +80,7 @@ https://github.com/chadhyatt/vince
 `, vinceVersion)
 
 	flag.Usage = func() {
-		fmt.Fprintf(flag.CommandLine.Output(), "USAGE: %s [OPTION]...\n", os.Args[0])
+		_, _ = fmt.Fprintf(flag.CommandLine.Output(), "USAGE: %s [OPTION]...\n", os.Args[0])
 		flag.PrintDefaults()
 	}
 

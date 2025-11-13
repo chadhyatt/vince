@@ -36,7 +36,7 @@ type Client struct {
 	NoVncWebsockifyPath string
 	NoVncUserAgent      string
 
-	// Meant to be set internally, but accessible by frontend
+	// Generally et internally, but accessible by frontend
 
 	Conn           net.Conn
 	ProtoVer       string // Negotiated protocol version
@@ -45,24 +45,22 @@ type Client struct {
 	SecurityResult SecurityResult
 }
 
-// I should NOT have to do this
 type websocketNetConn struct {
 	*websocket.Conn
 }
 
 func (c *websocketNetConn) Read(b []byte) (int, error) {
-	_, out, err := c.Conn.ReadMessage()
+	_, out, err := c.ReadMessage()
 	n := copy(b, out)
 	return n, err
 }
 
 func (c *websocketNetConn) Write(b []byte) (int, error) {
-	err := c.Conn.WriteMessage(websocket.BinaryMessage, b)
-	return len(b), err // We're larping about how many bytes we wrote
+	err := c.WriteMessage(websocket.BinaryMessage, b)
+	return len(b), err
 }
 
 func (c *websocketNetConn) SetDeadline(t time.Time) error {
-	// MEGA LARPING
 	return nil
 }
 
@@ -172,10 +170,9 @@ func (client *Client) Connect() error {
 	return nil
 }
 
-// Explicitly close the connection from our end
 func (client *Client) Kill() {
 	if client.Conn != nil {
-		client.Conn.Close()
+		_ = client.Conn.Close()
 	}
 }
 

@@ -37,7 +37,7 @@ func (iter *WordlistIter) IterPasswords() func(func(string) bool) {
 		pterm.Error.Println(err)
 		os.Exit(1)
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 
 	scanner := bufio.NewScanner(f)
 
@@ -94,7 +94,7 @@ func countWordsInFile(filePath string) int {
 		pterm.Error.Println(err)
 		os.Exit(1)
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 
 	scanner := bufio.NewScanner(f)
 	scanner.Split(bufio.ScanLines)
