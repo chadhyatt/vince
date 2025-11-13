@@ -14,9 +14,9 @@ func doInitProbe() {
 	client := &rfb.Client{
 		DestAddr:            realTargetAddr,
 		ConnType:            *ConnType,
-		PacketDebug:         *PacketDebug,
+		PacketLog:           *PacketLog,
 		IsNoVnc:             *IsNoVnc,
-		NoVncIsWss:          *NoVncIsWss,
+		NoVncIsSsl:          *NoVncIsSsl,
 		NoVncWebsockifyPath: *NoVncWebsockifyPath,
 		NoVncUserAgent:      *NoVncUserAgent,
 	}
@@ -98,13 +98,5 @@ func doInitProbe() {
 	}
 
 	fmt.Println()
-	err := pterm.DefaultBulletList.WithItems(serverInfoList).Render()
-	_ = err
-
-	/*
-		if slices.Contains(client.SecurityTypes, rfb.VncAuthNone) {
-			pterm.Success.Printf("🎉 Server has none-auth enabled, you should be able to connect w/out a password\n")
-			os.Exit(0)
-		}
-	*/
+	_ = pterm.DefaultBulletList.WithItems(serverInfoList).Render()
 }

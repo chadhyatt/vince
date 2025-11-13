@@ -26,13 +26,13 @@ import (
 type Client struct {
 	// Params for frontend
 
-	DestAddr    string
-	ConnType    string
-	ProxyAddr   string // Passed to url.Parse, e.g. "socks5://127.0.0.1:1080". If empty, proxy is not used
-	PacketDebug bool   // Enables 2-way logging of packet hex dumps for debugging
+	DestAddr  string
+	ConnType  string
+	ProxyAddr string // Passed to url.Parse, e.g. "socks5://127.0.0.1:1080". If empty, proxy is not used
+	PacketLog bool   // Enables 2-way logging of packet hex dumps for debugging
 
 	IsNoVnc             bool
-	NoVncIsWss          bool
+	NoVncIsSsl          bool
 	NoVncWebsockifyPath string
 	NoVncUserAgent      string
 
@@ -68,7 +68,7 @@ func (c *websocketNetConn) SetDeadline(t time.Time) error {
 
 func (client *Client) read(buf []byte) (int, error) {
 	n, err := client.Conn.Read(buf)
-	if client.PacketDebug && err == nil {
+	if client.PacketLog && err == nil {
 		dump := hex.Dump(buf[:n])
 		log.Printf("[RECV] (%s -> %s)\n%s\n", client.Conn.RemoteAddr().String(), client.Conn.LocalAddr().String(), dump)
 	}
@@ -78,7 +78,7 @@ func (client *Client) read(buf []byte) (int, error) {
 
 func (client *Client) write(buf []byte) (int, error) {
 	n, err := client.Conn.Write(buf)
-	if client.PacketDebug && err == nil {
+	if client.PacketLog && err == nil {
 		dump := hex.Dump(buf[:n])
 		log.Printf("[SEND] (%s -> %s)\n%s\n", client.Conn.LocalAddr().String(), client.Conn.RemoteAddr().String(), dump)
 	}
@@ -100,7 +100,7 @@ func (client *Client) Connect() error {
 
 	if client.IsNoVnc {
 		scheme := "ws"
-		if client.NoVncIsWss {
+		if client.NoVncIsSsl {
 			scheme = "wss"
 		}
 

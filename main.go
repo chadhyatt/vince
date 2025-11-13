@@ -28,12 +28,12 @@ var (
 	ProxyFile  = flag.String("proxies", "", "Path to list of SOCKS(4/5) proxies to use for workers. If not provided, no proxies are used. File must be a txt list of proxies in the format \"scheme://[username:pass@]host[:port]\"")
 
 	IsNoVnc             = flag.Bool("novnc", false, "Specifies that the host is a noVNC server, and to connect over WebSocket")
-	NoVncIsWss          = flag.Bool("novnc-wss", false, "If -novnc, connects to the noVNC server over wss instead of ws (cert is ignored)")
-	NoVncWebsockifyPath = flag.String("novnc-websockify-path", "/websockify", "If -novnc, the noVNC Websockify path (relative to /) to connect over")
-	NoVncUserAgent      = flag.String("novnc-ua", "", "If -novnc, the User-Agent header to pass when connecting to Websockify")
+	NoVncIsSsl          = flag.Bool("novnc-ssl", false, "If -novnc, connects to the noVNC server over SSL (cert is ignored)")
+	NoVncWebsockifyPath = flag.String("novnc-websockify-path", "/websockify", "If -novnc, the noVNC Websockify path to connect over")
+	NoVncUserAgent      = flag.String("novnc-ua", "", "If -novnc, a specific User-Agent header to use with requests")
 
 	// workers
-	NumThreads   = flag.Int("t", 1, "Number of simultaneous worker threads. The target server may only be able to handle so many, or it may restrict 1 connection per IP, so proceed with caution")
+	NumThreads   = flag.Int("t", 1, "Number of worker threads")
 	NumRetries   = flag.Int("retries", -1, "Number of retry attempts per password for failed connections. -1 means infinite retries")
 	DelaySeconds = flag.Float64("delay", 0, "Delay between connections per worker thread")
 	StartIndex   = flag.Uint64("start", 0, "Start at index n in password iteration")
@@ -49,8 +49,8 @@ var (
 	RawCharset = flag.String("chars", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()?><;:'\"", "If mode is raw, the character set used for permutations")
 	RawRange   = flag.String("range", "1-6", "If mode is raw, min/max number range for password combination length. May be either a single number, or 2 numbers in the format \"1-6\"")
 
-	// bool flags
-	PacketDebug = flag.Bool("packet-debug", false, "Enables packet dump logging for debug (meant for use with one thread)")
+	// debug
+	PacketLog = flag.Bool("packet-log", false, "Enables packet dump logging for debug (only use with one thread)")
 )
 
 var (
@@ -224,7 +224,7 @@ https://github.com/chadhyatt/vince
 			}
 		}()
 
-		// Actual workers (complete mess, sorry to anyone reading this hoping for sane, maintainable code)
+		// Individual workers
 		for w := 0; w < *NumThreads; w++ {
 			threadWg.Add(1)
 
@@ -253,9 +253,9 @@ https://github.com/chadhyatt/vince
 						client := &rfb.Client{
 							DestAddr:            realTargetAddr,
 							ConnType:            *ConnType,
-							PacketDebug:         *PacketDebug,
+							PacketLog:           *PacketLog,
 							IsNoVnc:             *IsNoVnc,
-							NoVncIsWss:          *NoVncIsWss,
+							NoVncIsSsl:          *NoVncIsSsl,
 							NoVncWebsockifyPath: *NoVncWebsockifyPath,
 							NoVncUserAgent:      *NoVncUserAgent,
 						}
