@@ -7,7 +7,7 @@ toolchain go1.24.1
 require (
 	github.com/bdandy/go-socks4 v1.2.3
 	github.com/gorilla/websocket v1.5.3
-	github.com/pterm/pterm v0.12.81
+	github.com/pterm/pterm v0.12.82
 	golang.org/x/net v0.47.0
 )
 
