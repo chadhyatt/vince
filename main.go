@@ -50,7 +50,6 @@ var (
 	RawRange   = flag.String("range", "1-6", "If mode is raw, min/max number range for password combination length. May be either a single number, or 2 numbers in the format \"1-6\"")
 
 	// bool flags
-	NoInitProbe = flag.Bool("no-probe", false, "Don't perform an initial connection handshake probe")
 	PacketDebug = flag.Bool("packet-debug", false, "Enables packet dump logging for debug (meant for use with one thread)")
 )
 
@@ -190,9 +189,7 @@ https://github.com/chadhyatt/vince
 	}
 
 	// Do an initial handshake probe
-	if !*NoInitProbe {
-		doInitProbe()
-	}
+	doInitProbe()
 
 	// Worker logic stuff
 	{
