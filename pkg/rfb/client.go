@@ -15,7 +15,7 @@ import (
 	"time"
 
 	_ "github.com/bdandy/go-socks4"
-	"github.com/chadhyatt/vince/util"
+	"github.com/chadhyatt/vince/pkg/util"
 	"github.com/gorilla/websocket"
 	"golang.org/x/net/proxy"
 )

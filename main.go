@@ -12,9 +12,9 @@ import (
 
 	_ "embed"
 
-	"github.com/chadhyatt/vince/pool"
-	"github.com/chadhyatt/vince/rfb"
-	"github.com/chadhyatt/vince/util"
+	"github.com/chadhyatt/vince/pkg/pool"
+	"github.com/chadhyatt/vince/pkg/rfb"
+	"github.com/chadhyatt/vince/pkg/util"
 	"github.com/pterm/pterm"
 )
 

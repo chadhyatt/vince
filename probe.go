@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/chadhyatt/vince/rfb"
+	"github.com/chadhyatt/vince/pkg/rfb"
 	"github.com/pterm/pterm"
 )
 
