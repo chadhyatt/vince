@@ -140,12 +140,14 @@ https://github.com/chadhyatt/vince
 
 	switch bruteMode {
 	case "wordlist":
-		if *BruteMode == "" {
-			// User only provided server addr (-a), slightly more helpful error
-			pterm.Error.Printf("provide a path to a wordlist file (-w), or specify another bruteforce mode (-m)\n")
-			fmt.Println()
-			usage(1)
-		} else if *WordlistPath == "" {
+		if *WordlistPath == "" {
+			if *BruteMode == "" {
+				// User only provided server addr (-a), slightly more helpful error
+				pterm.Error.Printf("provide a path to a wordlist file (-w), or specify another bruteforce mode (-m)\n")
+				fmt.Println()
+				usage(1)
+			}
+
 			pterm.Error.Printf("bruteforce mode (-m) \"wordlist\" provided, but wordlist path (-w) is missing\n")
 			fmt.Println()
 			usage(1)
