@@ -177,7 +177,7 @@ https://github.com/chadhyatt/vince
 			usage(1)
 		}
 
-		iter = new(RawIter)
+		iter = &RawIter{}
 
 		pwCount := iter.GetPasswordCount()
 		if *StartIndex > pwCount {
