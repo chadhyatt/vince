@@ -1,14 +1,12 @@
 module github.com/chadhyatt/vince
 
-go 1.24.0
-
-toolchain go1.24.1
+go 1.25.0
 
 require (
 	github.com/bdandy/go-socks4 v1.2.3
 	github.com/gorilla/websocket v1.5.3
 	github.com/pterm/pterm v0.12.82
-	golang.org/x/net v0.48.0
+	golang.org/x/net v0.53.0
 )
 
 require (
@@ -23,7 +21,7 @@ require (
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/stretchr/testify v1.9.0 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
-	golang.org/x/sys v0.39.0 // indirect
-	golang.org/x/term v0.38.0 // indirect
-	golang.org/x/text v0.32.0 // indirect
+	golang.org/x/sys v0.43.0 // indirect
+	golang.org/x/term v0.42.0 // indirect
+	golang.org/x/text v0.36.0 // indirect
 )
